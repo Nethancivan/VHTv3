@@ -20,8 +20,13 @@ export function MediumMantraAudio() {
     const removeGestureListeners = () => {
       window.removeEventListener("pointerdown", startAudio);
       window.removeEventListener("touchstart", startAudio);
-      window.removeEventListener("mousedown", startAudio);
       window.removeEventListener("keydown", startAudio);
+    };
+
+    const addGestureListeners = () => {
+      window.addEventListener("pointerdown", startAudio, { once: true });
+      window.addEventListener("touchstart", startAudio, { once: true });
+      window.addEventListener("keydown", startAudio, { once: true });
     };
 
     const fadeIn = () => {
@@ -45,22 +50,21 @@ export function MediumMantraAudio() {
 
     async function startAudio() {
       if (hasStartedRef.current || !audioRef.current) return;
-      hasStartedRef.current = true;
 
       try {
         audioRef.current.currentTime = 0;
         audioRef.current.volume = MEDIUM_MANTRA_AUDIO.initialVolume;
         await audioRef.current.play();
+        hasStartedRef.current = true;
+        setAudioAvailable(true);
+        removeGestureListeners();
         fadeIn();
       } catch (error) {
-        setAudioAvailable(false);
         console.warn(
-          "[MediumMantraAudio] Audio could not start. Google Drive may block direct playback, autoplay may be restricted, or the file may not be publicly accessible.",
+          "[MediumMantraAudio] Autoplay was blocked. Audio will retry on the first interaction.",
           error
         );
       }
-
-      removeGestureListeners();
     }
 
     const onAudioError = () => {
@@ -68,11 +72,10 @@ export function MediumMantraAudio() {
       console.warn("[MediumMantraAudio] Failed to load remote audio:", MEDIUM_MANTRA_AUDIO.src);
     };
 
-    window.addEventListener("pointerdown", startAudio, { once: true });
-    window.addEventListener("touchstart", startAudio, { once: true });
-    window.addEventListener("mousedown", startAudio, { once: true });
-    window.addEventListener("keydown", startAudio, { once: true });
     audio.addEventListener("error", onAudioError);
+    void startAudio().then(() => {
+      if (!hasStartedRef.current) addGestureListeners();
+    });
 
     return () => {
       removeGestureListeners();

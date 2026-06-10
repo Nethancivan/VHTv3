@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import GhostCursor from "@/components/GhostCursor/GhostCursor";
 import { MediumMantraAudio } from "@/components/Audio/MediumMantraAudio";
 import { ARTWORK_DNA_CODE } from "@/data/artwork-dna";
 
@@ -30,20 +29,6 @@ export function RitualLanding() {
         <p className="subhead">{subheadline}</p>
         <p className="description">{description}</p>
       </motion.section>
-      <GhostCursor
-        color="#B497CF"
-        brightness={1}
-        edgeIntensity={0}
-        trailLength={50}
-        inertia={0.5}
-        grainIntensity={0.05}
-        bloomStrength={0.1}
-        bloomRadius={1.0}
-        bloomThreshold={0.025}
-        fadeDelayMs={1000}
-        fadeDurationMs={1500}
-        zIndex={20}
-      />
       <MediumMantraAudio />
       <div className="vignette" />
       <div className="scanline" />
