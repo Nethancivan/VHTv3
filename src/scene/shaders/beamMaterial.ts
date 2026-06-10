@@ -26,7 +26,7 @@ export const BeamMaterial = shaderMaterial(
     float edge = smoothstep(0.44, 0.08, abs(vUv.x - 0.5));
     float flicker = 0.85 + sin(uTime * 18.0) * 0.045 + sin(uTime * 5.0) * 0.08;
     vec3 color = mix(uEdge, uWhite, center);
-    float alpha = edge * (0.28 + center * 0.58) * (flicker + uPulse * 0.9);
+    float alpha = edge * (0.08 + center * 0.22) * (flicker + uPulse * 0.5);
     gl_FragColor = vec4(color, alpha);
   }
   `

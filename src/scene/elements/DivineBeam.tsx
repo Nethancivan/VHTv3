@@ -33,7 +33,7 @@ export function DivineBeam() {
       </mesh>
       <mesh position={[0, -1.2, 0.03]} renderOrder={3}>
         <cylinderGeometry args={[0.22, 0.72, 5.5, 48, 1, true]} />
-        <meshBasicMaterial color="#fff2df" transparent opacity={0.12} blending={AdditiveBlending} depthWrite={false} side={DoubleSide} />
+        <meshBasicMaterial color="#fff2df" transparent opacity={0.055} blending={AdditiveBlending} depthWrite={false} side={DoubleSide} />
       </mesh>
     </group>
   );

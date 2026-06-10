@@ -19,8 +19,8 @@ export const WaterMaterial = shaderMaterial(
   void main() {
     vUv = uv;
     vec3 p = position;
-    float ripple = sin((p.x * 2.1 + uTime * 0.8)) * 0.018 + sin((p.y * 3.4 - uTime * 0.7)) * 0.012;
-    float mouseWave = sin(distance(p.xy, uMouse * vec2(5.0, 2.0)) * 11.0 - uTime * 5.0) * 0.018;
+    float ripple = sin((p.x * 1.8 + uTime * 0.55)) * 0.014 + sin((p.y * 3.1 - uTime * 0.46)) * 0.009;
+    float mouseWave = sin(distance(p.xy, uMouse * vec2(4.0, 1.8)) * 10.0 - uTime * 4.0) * 0.012;
     p.z += ripple + mouseWave;
     vec4 world = modelMatrix * vec4(p, 1.0);
     vWorld = world.xyz;
@@ -38,16 +38,17 @@ export const WaterMaterial = shaderMaterial(
 
   void main() {
     vec2 uv = vUv;
-    float horizon = smoothstep(0.18, 0.88, uv.y);
-    float wave = sin(uv.x * 90.0 + uTime * 1.8) * 0.5 + 0.5;
-    float broken = step(0.72, fract(sin(dot(floor(uv * 60.0), vec2(12.98, 78.23))) * 43758.54));
-    float haloReflection = smoothstep(0.55, 0.0, abs(uv.x - 0.5)) * smoothstep(0.0, 0.75, uv.y);
+    float wave = sin(uv.x * 82.0 + uTime * 1.15) * 0.5 + 0.5;
+    float broken = step(0.82, fract(sin(dot(floor(uv * 52.0), vec2(12.98, 78.23))) * 43758.54));
+    float haloReflection = smoothstep(0.22, 0.0, abs(uv.x - 0.5)) * smoothstep(0.05, 0.88, uv.y);
+    float blueReflection = smoothstep(0.48, 0.0, abs(uv.x - 0.5)) * smoothstep(0.0, 0.7, uv.y);
     vec3 color = uDeep;
-    color += uCyan * haloReflection * 0.18;
-    color += uEmber * haloReflection * (0.25 + wave * 0.16 + uPulse * 0.4);
-    color += vec3(0.9, 0.2, 0.95) * broken * haloReflection * 0.055;
-    float alpha = 0.92;
-    gl_FragColor = vec4(color, alpha);
+    color += uCyan * blueReflection * 0.075;
+    color += uEmber * haloReflection * (0.09 + wave * 0.07 + uPulse * 0.22);
+    color += vec3(0.45, 0.08, 0.55) * broken * blueReflection * 0.035;
+    color += vec3(0.015, 0.018, 0.035) * (sin(uv.y * 145.0 + uTime) * 0.5 + 0.5);
+    float alpha = 0.96;
+    gl_FragColor = vec4(color * 0.46, alpha);
   }
   `
 );

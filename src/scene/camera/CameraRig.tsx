@@ -1,37 +1,59 @@
 "use client";
 
-import { useFrame, useThree } from "@react-three/fiber";
-import { useRef } from "react";
-import { Vector3 } from "three";
-import { useRitualStore } from "@/state/ritualStore";
-
-const target = new Vector3(0, 1.25, 0);
-const position = new Vector3();
+import { OrbitControls } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
+import { MathUtils, TOUCH } from "three";
+import { isCompactViewport } from "@/scene/performance";
 
 export function CameraRig() {
-  const { camera } = useThree();
-  const cursor = useRitualStore((state) => state.cursor);
-  const pulse = useRitualStore((state) => state.pulse);
-  const lastPulse = useRef(0);
-  const impulse = useRef(0);
+  const camera = useThree((state) => state.camera);
+  const width = useThree((state) => state.size.width);
+  const compact = isCompactViewport(width);
+  const [idle, setIdle] = useState(true);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useFrame(({ clock }, delta) => {
-    if (pulse !== lastPulse.current) {
-      lastPulse.current = pulse;
-      impulse.current = 1;
+  const stopIdleMotion = () => {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    setIdle(false);
+  };
+
+  const resumeIdleMotion = () => {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    idleTimer.current = setTimeout(() => setIdle(true), 2800);
+  };
+
+  useEffect(() => {
+    camera.position.set(0, compact ? 1.52 : 1.62, compact ? 9.45 : 8.9);
+    if ("fov" in camera) {
+      camera.fov = compact ? 48 : 42;
+      camera.updateProjectionMatrix();
     }
+  }, [camera, compact]);
 
-    impulse.current = Math.max(0, impulse.current - delta * 0.8);
-    const t = clock.elapsedTime;
-    const breath = Math.sin(t * 0.47) * 0.075;
-    const orbitX = cursor.x * 0.9;
-    const orbitY = cursor.y * 0.34;
-    const flashPull = impulse.current * 0.55;
+  useEffect(() => {
+    return () => {
+      if (idleTimer.current) clearTimeout(idleTimer.current);
+    };
+  }, []);
 
-    position.set(orbitX, 1.82 + orbitY + breath, 10.4 - flashPull);
-    camera.position.lerp(position, 1 - Math.pow(0.035, delta));
-    camera.lookAt(target);
-  });
-
-  return null;
+  return (
+    <OrbitControls
+      makeDefault
+      target={[0, 1.18, 0]}
+      enableRotate
+      enableDamping
+      dampingFactor={0.06}
+      rotateSpeed={compact ? 0.42 : 0.48}
+      enablePan={false}
+      enableZoom={false}
+      minPolarAngle={MathUtils.degToRad(55)}
+      maxPolarAngle={MathUtils.degToRad(108)}
+      autoRotate={idle}
+      autoRotateSpeed={0.1}
+      touches={{ ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_ROTATE }}
+      onStart={stopIdleMotion}
+      onEnd={resumeIdleMotion}
+    />
+  );
 }

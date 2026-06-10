@@ -2,56 +2,49 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { useRitualStore } from "@/state/ritualStore";
+import GhostCursor from "@/components/GhostCursor/GhostCursor";
+import { MediumMantraAudio } from "@/components/Audio/MediumMantraAudio";
+import { ARTWORK_DNA_CODE } from "@/data/artwork-dna";
 
 const RitualCanvas = dynamic(() => import("@/scene/RitualCanvas").then((mod) => mod.RitualCanvas), {
   ssr: false
 });
 
 export function RitualLanding() {
-  const triggerCenterPulse = useRitualStore((state) => state.triggerCenterPulse);
-  const setHoverZone = useRitualStore((state) => state.setHoverZone);
+  const { headline, subheadline, description } = ARTWORK_DNA_CODE.HERO_COPY;
 
   return (
-    <main className="landing">
+    <main className="landing" data-artwork={ARTWORK_DNA_CODE.ARTWORK_IDENTITY.title}>
       <div className="scene">
         <RitualCanvas />
       </div>
-      <motion.header
-        className="topbar"
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1, ease: "easeOut" }}
-      >
-        <a className="mark" href="#" aria-label="AI's Collection home">
-          AI&apos;s Collection
-        </a>
-        <nav className="nav" aria-label="Primary">
-          <a href="#">About</a>
-          <a href="#">Collection</a>
-          <a href="#">Journal</a>
-          <a href="#">Contact</a>
-        </nav>
-      </motion.header>
       <motion.section
         className="copy"
-        onMouseEnter={() => setHoverZone("center")}
-        onMouseLeave={() => setHoverZone("none")}
         initial={{ opacity: 0, x: -30 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1.25, delay: 0.2, ease: "easeOut" }}
+        transition={{ duration: 1.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
       >
-        <p className="eyebrow">Generative Art from Human Imagination</p>
-        <h1>AI&apos;s Collection</h1>
-        <p className="subhead">A digital ritual space for memory, belief, and the unseen self.</p>
-        <p className="description">
-          A living installation where spirit, consciousness, fire, water, and machine perception
-          gather inside an infinite black chamber.
-        </p>
-        <button className="enter" onClick={triggerCenterPulse} onMouseEnter={() => setHoverZone("center")}>
-          Enter Collection
-        </button>
+        <h1 className="artwork-title" data-text={headline}>
+          {headline}
+        </h1>
+        <p className="subhead">{subheadline}</p>
+        <p className="description">{description}</p>
       </motion.section>
+      <GhostCursor
+        color="#B497CF"
+        brightness={1}
+        edgeIntensity={0}
+        trailLength={50}
+        inertia={0.5}
+        grainIntensity={0.05}
+        bloomStrength={0.1}
+        bloomRadius={1.0}
+        bloomThreshold={0.025}
+        fadeDelayMs={1000}
+        fadeDurationMs={1500}
+        zIndex={20}
+      />
+      <MediumMantraAudio />
       <div className="vignette" />
       <div className="scanline" />
     </main>

@@ -28,13 +28,13 @@ function FireBowl({ position, scale = 1 }: { position: [number, number, number];
         <meshStandardMaterial color="#12100d" roughness={0.45} metalness={0.9} emissive="#401006" emissiveIntensity={0.8} />
       </mesh>
       <group ref={flame} position={[0, 0.36, 0]}>
-        <mesh>
+        <mesh scale={[0.8, 0.72, 0.8]}>
           <coneGeometry args={[0.32, 0.86, 24]} />
-          <meshBasicMaterial color="#ff4a14" transparent opacity={0.72} blending={AdditiveBlending} depthWrite={false} />
+          <meshBasicMaterial color="#ff4a14" transparent opacity={0.48} blending={AdditiveBlending} depthWrite={false} />
         </mesh>
-        <mesh position={[0, 0.08, 0]} scale={[0.58, 0.8, 0.58]}>
+        <mesh position={[0, 0.05, 0]} scale={[0.48, 0.58, 0.48]}>
           <coneGeometry args={[0.26, 0.7, 24]} />
-          <meshBasicMaterial color="#ffd06d" transparent opacity={0.68} blending={AdditiveBlending} depthWrite={false} />
+          <meshBasicMaterial color="#ffd06d" transparent opacity={0.5} blending={AdditiveBlending} depthWrite={false} />
         </mesh>
       </group>
     </group>
@@ -44,12 +44,8 @@ function FireBowl({ position, scale = 1 }: { position: [number, number, number];
 export function RitualVessels() {
   const vessels = useMemo(
     () => [
-      [-4.6, 0.08, 2.0, 0.95],
-      [4.4, 0.08, 1.9, 0.9],
-      [-2.8, 0.04, 0.6, 0.58],
-      [2.85, 0.04, 0.62, 0.58],
-      [-6.6, 0.06, -1.2, 0.72],
-      [6.55, 0.06, -1.25, 0.72]
+      [-2.7, 0.03, -0.05, 0.44],
+      [2.7, 0.03, -0.05, 0.44]
     ] as [number, number, number, number][],
     []
   );

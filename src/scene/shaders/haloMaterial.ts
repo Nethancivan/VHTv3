@@ -42,6 +42,7 @@ export const HaloMaterial = shaderMaterial(
     float outer = smoothstep(1.0, 0.72, r);
     float plasma = sin(angle * 26.0 + uTime * 1.9) * 0.5 + 0.5;
     plasma += sin((r * 24.0 - uTime * 2.8) + sin(angle * 9.0)) * 0.35;
+    plasma = clamp(plasma, 0.0, 1.0);
     float glitch = step(0.88, hash(vec2(floor(vUv.y * 80.0 + uTime * 4.0), floor(uTime * 8.0))));
     float bars = smoothstep(0.03, 0.0, abs(fract(vUv.y * 36.0 + uTime * 0.22) - 0.5));
     vec3 color = mix(uRed, uMagenta, plasma);
@@ -49,7 +50,7 @@ export const HaloMaterial = shaderMaterial(
     float pulse = 1.0 + uPulse * 1.4 + uHover * 0.42;
     float alpha = (ring * (1.35 + plasma) + bars * glitch * 0.55) * outer;
     alpha += smoothstep(0.48, 0.08, r) * 0.18;
-    gl_FragColor = vec4(color * pulse * (1.0 + glitch * 0.9), alpha);
+    gl_FragColor = vec4(color * pulse * (0.72 + glitch * 0.5), alpha * 0.58);
   }
   `
 );

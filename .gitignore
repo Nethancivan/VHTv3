@@ -41,6 +41,34 @@ node_modules/
 out/
 *.tsbuildinfo
 
+# --- Local heavy media assets ---
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wav
+*.aiff
+*.flac
+
+# Local source media folder
+public/audio/*.mp4
+public/audio/*.mov
+public/audio/*.wav
+public/audio/*.aiff
+public/audio/*.flac
+
+# Keep lightweight compressed audio allowed if needed
+!public/audio/*.mp3
+!public/audio/*.ogg
+
+# Local raw art/audio assets
+/assets/raw/
+/media/raw/
+
+# Specific local source files
+Médium Mantra.mp4
+public/audio/Médium Mantra.mp4
+
 
 
 

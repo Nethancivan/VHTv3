@@ -29,8 +29,8 @@ export function RitualWater() {
   });
 
   return (
-    <mesh ref={mesh} position={[0, -0.08, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-      <planeGeometry args={[24, 14, 180, 96]} />
+    <mesh ref={mesh} position={[0, -0.08, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow renderOrder={0}>
+      <planeGeometry args={[24, 16, 120, 72]} />
       <waterMaterial ref={mat} transparent side={DoubleSide} />
     </mesh>
   );
